@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx 
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- Define Service and Repository beans using auto scan feature of Spring -->
+	<context:component-scan base-package="com.java_spring.dao,com.java_spring.service" />
+	
+	<!--  Support transaction management statements like @Transactional -->
+	<tx:annotation-driven />
+	
+    <!-- Define DataSource bean using DriverManagerDataSource class of Spring --> 
+	<bean id="myDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgresql://localhost:5432/postgres"></property>
+		<property name="username" value="postgres"></property>
+		<property name="password" value="abcd1234"></property>
+	</bean>
+
+	<!-- Define sessionFactory bean of Spring class -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="myDataSource" />
+		<property name="packagesToScan" value="com.java_spring" />
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+				hibernate.hbm2ddl.auto=update
+				hibernate.show_sql=true
+			</value>
+		</property>
+	</bean>
+</beans>
